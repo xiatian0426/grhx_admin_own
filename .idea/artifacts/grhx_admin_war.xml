@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="grhx-admin:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <root id="archive" name="grhx_admin_own.war">
+      <element id="artifact" artifact-name="grhx-admin:war exploded" />
+    </root>
+  </artifact>
+</component>

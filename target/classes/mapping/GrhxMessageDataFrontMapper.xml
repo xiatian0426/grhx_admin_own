@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.acc.dao.GrhxMessageDataFrontMapper">
+
+	<resultMap id="grhxMessageData" type="com.acc.model.GrhxMessageDataFront">
+        <result property="id" column="ID"/>
+        <result property="title" column="TITLE"/>
+        <result property="createTime" column="CREATE_TIME"/>
+        <result property="date" column="DATE"/>
+        <result property="province" column="PROVINCE"/>
+        <result property="provincename" column="PROVINCENAME"/>
+        <result property="messagetype" column="MESSAGETYPE"/>
+        <result property="messagename" column="MESSAGENAME"/>
+        <result property="content" column="CONTENT"/>
+        <result property="webtype" column="WEBTYPE"/>
+        <result property="createid" column="CREATE_ID"/>
+        <result property="operaterid" column="OPERATERID"/>
+        <result property="operatetime" column="OPERATETIME"/>
+        <result property="userRealName" column="USERREALNAME"/>
+        <result property="busType" column="BUSTYPE"/>
+        <result property="frontmodule" column="FRONTMODULE"/>
+	</resultMap>
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="columns">
+	    <![CDATA[
+		ID,TITLE,CREATE_TIME,DATE,PROVINCE,MESSAGETYPE,CONTENT,WEBTYPE,CREATE_ID,OPERATERID,OPERATETIME,BUSTYPE,FRONTMODULE
+	    ]]>
+	</sql>
+
+	<!-- useGeneratedKeys="true" keyProperty="xxx" for sqlserver and mysql -->
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id">
+    <![CDATA[
+        INSERT INTO GRHX_MESSAGEDATA_FRONT (
+        	ID ,
+        	TITLE ,
+        	CREATE_TIME ,
+        	DATE,
+        	PROVINCE,
+        	MESSAGETYPE,
+        	WEBTYPE,
+        	CREATE_ID,
+        	BUSTYPE,
+        	FRONTMODULE
+        ) VALUES (
+        	#{id} ,
+        	#{title} ,
+        	#{createTime} ,
+        	#{date} ,
+        	#{province} ,
+        	#{messagetype} ,
+        	#{webtype} ,
+        	#{createid} ,
+        	#{busType},
+        	#{frontmodule}
+        )
+    ]]>
+	</insert>
+    
+	<update id="update" >
+    <![CDATA[
+        UPDATE GRHX_MESSAGEDATA_FRONT SET
+	        TITLE = #{title} ,
+	        DATE = #{date} ,
+	        PROVINCE = #{province} ,
+	        MESSAGETYPE = #{messagetype} ,
+	        CONTENT = #{content} ,
+	        OPERATERID = #{operaterid} ,
+	        OPERATETIME = #{operatetime},
+	        WEBTYPE = #{webtype},
+	        BUSTYPE = #{busType},
+	        FRONTMODULE = #{frontmodule}
+        WHERE 
+	        ID = #{id} 
+    ]]>
+	</update>
+
+    <delete id="delete">
+    <![CDATA[
+        DELETE FROM GRHX_MESSAGEDATA_FRONT WHERE
+        ID = #{id} 
+    ]]>
+    </delete>
+    
+    <select id="getById" resultMap="grhxMessageData">
+		SELECT <include refid="columns" />
+	    <![CDATA[
+		    FROM GRHX_MESSAGEDATA_FRONT 
+	        WHERE 
+		        ID = #{id} 
+	    ]]>
+	</select>
+	
+	<sql id="findWhere">
+		<!-- ognl访问静态方法的表达式 为class org.apache.maven.project.MavenProjectmethod(args),以下为调用rapid中的Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	    
+			<if test="messagetypes != '' and messagetypes != null">  	
+				and MESSAGETYPE in (${messagetypes})
+			</if>			
+	       <if test="title != '' and title != null">
+				and TITLE like CONCAT('%',#{title},'%')
+			</if>
+			<if test="province != '' and province != null and province != 0 and province != '0'">
+				and PROVINCE like CONCAT(#{province},'%')
+			</if>
+			<if test="messagetype != '' and messagetype != null and messagetype != 0 and messagetype != '0'">
+				and MESSAGETYPE = #{messagetype}
+			</if>
+		</where>
+	</sql>
+	<sql id="findMapWhere">
+		<!-- ognl访问静态方法的表达式 为class org.apache.maven.project.MavenProjectmethod(args),以下为调用rapid中的Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+	       <if test="title != '' and title != null">
+				and TITLE = #{title}
+			</if>
+			<if test="province != '' and province != null and province != 0 and province != '0'">
+				and PROVINCE = #{province}
+			</if>
+			<if test="messagetype != '' and messagetype != null and messagetype != 0 and messagetype != '0'">
+				and MESSAGETYPE = #{messagetype}
+			</if>
+			<if test="date != '' and date != null">
+				and DATE = #{date}
+			</if>
+		</where>
+	</sql>
+		
+</mapper>

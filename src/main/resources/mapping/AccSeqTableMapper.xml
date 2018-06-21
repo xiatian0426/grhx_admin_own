@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.acc.dao.AccSeqTableMapper">
+
+	<resultMap id="accSeqTable" type="com.acc.model.AccSeqTable">
+        <result property="tableName" column="TABLE_NAME"/>
+        <result property="tableRowValue" column="TABLE_ROW_VALUE"/>
+	</resultMap>
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="columns">
+	    <![CDATA[
+		TABLE_NAME,TABLE_ROW_VALUE
+	    ]]>
+	</sql>
+
+	<update id="update" >
+    <![CDATA[
+        UPDATE ACC_SEQ_TABLE SET
+	        TABLE_ROW_VALUE = #{tableRowValue} 
+        WHERE 
+	        TABLE_NAME = #{tableName} 
+    ]]>
+	</update>
+
+    <select id="getByTableName" resultMap="accSeqTable">
+		SELECT <include refid="columns" />
+	    <![CDATA[
+		    FROM ACC_SEQ_TABLE 
+	        WHERE 
+		        TABLE_NAME = #{tableName} 
+	    ]]>
+	</select>
+</mapper>
+
