@@ -34,7 +34,7 @@ public class CrawlerBIBEDataTask {
 	 */
 	@Scheduled(cron = "0 30 11,18 * * ?")
 	public void execute () {
-		Map<String, String> provinceMap = null;
+		/*Map<String, String> provinceMap = null;
 		try {
 			System.out.println("获取数据开始");
 			provinceMap = accProvinceService.getProvince();
@@ -53,7 +53,7 @@ public class CrawlerBIBEDataTask {
 		} catch (SelectException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}*/
 	}
 	
 	private int getCrawlerDataBIBE(int pageNum,Map<String, String> provinceMap,String busType,String currdate){

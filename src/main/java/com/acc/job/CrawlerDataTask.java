@@ -34,7 +34,7 @@ public class CrawlerDataTask {
 	 */
 	@Scheduled(cron = "0 0 10,18 * * ?")
 	public void execute () {
-		Map<String, String> provinceMap = null;
+		/*Map<String, String> provinceMap = null;
 		try {
 			System.out.println("获取数据开始");
 			provinceMap = accProvinceService.getProvince();
@@ -62,7 +62,7 @@ public class CrawlerDataTask {
 		} catch (SelectException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}*/
 	}
 	/**
 	 * 爬取"全国公共资源交易平台"的数据

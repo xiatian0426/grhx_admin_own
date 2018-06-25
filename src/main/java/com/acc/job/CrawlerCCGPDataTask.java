@@ -36,7 +36,7 @@ public class CrawlerCCGPDataTask {
 	 */
 	@Scheduled(cron = "0 0 11,17 * * ?")
 	public void execute () throws Exception {
-		//一天7000+数据
+		/*//一天7000+数据
 		Map<String, String> provinceMap = null;
 		try {
 			System.out.println("爬取任务开始...");
@@ -68,7 +68,7 @@ public class CrawlerCCGPDataTask {
 		} catch (SelectException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}*/
 	}
 	/**
 	 * 爬取"中国政府采购网"的数据

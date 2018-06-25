@@ -11,7 +11,6 @@
 	<!-- 默认首页定义 -->
 	<welcome-file-list>
 		<welcome-file>index.jsp</welcome-file>
-		<welcome-file>index.html</welcome-file>
 	</welcome-file-list>
 
 	<!-- Error Page定义 -->
