@@ -39,7 +39,7 @@
 					<option value="1" <c:if test="${query.type=='1' }">selected="selected"</c:if>>行业动态</option>
 					<option value="2" <c:if test="${query.type=='2' }">selected="selected"</c:if>>展会信息</option>
 					<option value="3" <c:if test="${query.type=='3' }">selected="selected"</c:if>>优秀供应商</option>
-					<option value="3" <c:if test="${query.type=='4' }">selected="selected"</c:if>>会员中标榜</option>
+					<option value="4" <c:if test="${query.type=='4' }">selected="selected"</c:if>>会员中标榜</option>
 				</select>
 			<span class="infoLable">状态：</span>
 				<select class="select-nosearch" name="isdelete" style="width: 120px;height: 28px;">
