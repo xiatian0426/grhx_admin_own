@@ -26,7 +26,7 @@ public class FrontDataTask {
 	/**
 	 * 爬取任务 * 0/10 *  * * ? 每10分钟执行一次
 	 */
-	@Scheduled(cron="* 0/1 *  * * ? ")
+	@Scheduled(cron="* 0/10 *  * * ? ")
 	public void execute () {
 		/**
 		 * 更新VIP 拟在建  招标公告  中标公告
