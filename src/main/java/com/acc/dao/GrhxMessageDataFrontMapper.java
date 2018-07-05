@@ -10,4 +10,5 @@ public interface GrhxMessageDataFrontMapper {
 	void update(GrhxMessageDataFront grhxMessageData) throws Exception;
 	void delete(Map<String, Object> map) throws Exception;
 	GrhxMessageDataFront getById(Map<String, Object> map) throws Exception;
+	void deleteByMap(Map<String, Object> map) throws Exception;
 }

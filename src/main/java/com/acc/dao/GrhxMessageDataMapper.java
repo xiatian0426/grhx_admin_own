@@ -18,5 +18,6 @@ public interface GrhxMessageDataMapper {
 	GrhxMessageData getById(Map<String, Object> map) throws Exception;
 	GrhxMessageData getByIdContent(Map<String, Object> map) throws Exception;
 	List<GrhxMessageData> getByMessagetype (Map<String, Object> map) throws SelectException;
+	List<GrhxMessageData> getByMessagetypeNum (Map<String, Object> map) throws SelectException;
 	List<GrhxMessageData> getByMap(Map<String, Object> map) throws SelectException;
 }

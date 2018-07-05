@@ -41,5 +41,9 @@ public class GrhxMessageDataFrontServiceImpl extends BaseServiceImpl<GrhxMessage
 		// TODO Auto-generated method stub
 		return grhxMessageDataFrontMapper.getById(map);
 	}
-	
+	@Override
+	public void deleteByMap(Map<String, Object> map) throws Exception{
+		// TODO Auto-generated method stub
+		grhxMessageDataFrontMapper.deleteByMap(map);
+	}
 }

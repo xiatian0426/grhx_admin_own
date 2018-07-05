@@ -36,5 +36,6 @@ public interface IGrhxMessageDataService extends IBaseService<GrhxMessageData>{
 	GrhxMessageData getByIdContent(Map<String, Object> map) throws Exception;
 	
 	List<GrhxMessageData> getByMessagetype (Map<String, Object> map) throws SelectException;
+	List<GrhxMessageData> getByMessagetypeNum (Map<String, Object> map) throws SelectException;
 	List<GrhxMessageData> getByMap(Map<String, Object> map) throws SelectException;
 }

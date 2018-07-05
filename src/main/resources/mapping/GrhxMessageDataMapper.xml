@@ -221,5 +221,29 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 	    FROM GRHX_MESSAGEDATA 
 	    <include refid="findMapWhere"/>
     </select>
+
+
+	<select id="getByMessagetypeNum" resultMap="grhxMessageData">
+		SELECT <include refid="columns" />
+		FROM GRHX_MESSAGEDATA
+		where MESSAGETYPE = #{messagetype}
+		<if test="sign == 1">
+			order by DATE desc limit 5
+		</if>
+		/*招标公告取16-20*/
+		<if test="sign == 2">
+			order by DATE desc limit 16,5
+		</if>
+
+		/*热点信息取1-10*/
+		<if test="sign == 3">
+			order by DATE desc limit 10
+		</if>
+
+		/*推荐项目取11-15*/
+		<if test="sign == 4">
+			order by DATE desc limit 11,5
+		</if>
+	</select>
 </mapper>
 
