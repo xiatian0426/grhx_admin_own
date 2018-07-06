@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 用于更新前端显示数据 每10分钟执行一次
+ * 用于更新前端显示数据 每5分钟执行一次
  */
 @Component("frontDataTask")
 public class FrontDataTask {
@@ -30,9 +30,9 @@ public class FrontDataTask {
 	private IGrhxMessageDataFrontService grhxMessageDataFrontService;
 	
 	/**
-	 * 更新任务 * 0/10 *  * * ? 每10分钟执行一次
+	 * 更新任务 * 0/5 *  * * ? 每5分钟执行一次
 	 */
-	@Scheduled(cron="* 0/3 *  * * ? ")
+	@Scheduled(cron="* 0/5 *  * * ? ")
 	public void execute () {
 		/**
 		 * 更新VIP 拟在建  招标公告  中标公告  热点信息  推荐项目
