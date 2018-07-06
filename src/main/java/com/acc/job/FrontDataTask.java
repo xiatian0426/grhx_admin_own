@@ -30,7 +30,7 @@ public class FrontDataTask {
 	private IGrhxMessageDataFrontService grhxMessageDataFrontService;
 	
 	/**
-	 * 更新任务 * 0/5 6-21  * * ? 每天6-21点每5分钟执行一次
+	 * 更新任务 0 0/5 6-21  * * ? 每天6-21点每5分钟执行一次
 	 */
 	@Scheduled(cron="0 0/5 6-21  * * ? ")
 	public void execute () {
