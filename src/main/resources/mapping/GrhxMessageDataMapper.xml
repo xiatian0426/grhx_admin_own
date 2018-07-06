@@ -226,7 +226,8 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
 	<select id="getByMessagetypeNum" resultMap="grhxMessageData">
 		SELECT <include refid="columns" />
 		FROM GRHX_MESSAGEDATA
-		where MESSAGETYPE = #{messagetype}
+		where ISDELETE=0
+		and MESSAGETYPE = #{messagetype}
 		<if test="sign == 1">
 			order by DATE desc limit 5
 		</if>
