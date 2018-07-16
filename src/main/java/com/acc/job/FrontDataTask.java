@@ -39,7 +39,6 @@ public class FrontDataTask {
 		 */
 		Map<String, Object> map;
 		List<GrhxMessageData> grhxMessageDataList;
-		GrhxMessageDataFront messageDataFront;
 		System.out.println("更新VIP 拟在建  招标公告  中标公告 热点信息  推荐项目开始...");
 		for (int i=1;i<=5;i++){
 			try {
