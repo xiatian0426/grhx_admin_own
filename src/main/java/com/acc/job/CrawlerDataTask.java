@@ -32,9 +32,9 @@ public class CrawlerDataTask {
 	/**
 	 * 爬取任务 0 0 1 * * ? 每天11点执行
 	 */
-	@Scheduled(cron = "0 0 10,18 * * ?")
+	@Scheduled(cron = "0 20 10,18 * * ?")
 	public void execute () {
-		/*Map<String, String> provinceMap = null;
+		Map<String, String> provinceMap = null;
 		try {
 			System.out.println("获取数据开始");
 			provinceMap = accProvinceService.getProvince();
@@ -62,7 +62,7 @@ public class CrawlerDataTask {
 		} catch (SelectException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}*/
+		}
 	}
 	/**
 	 * 爬取"全国公共资源交易平台"的数据
@@ -91,77 +91,81 @@ public class CrawlerDataTask {
 					grhxMessageData = new GrhxMessageData();
 					url = e.getElementsByTag("h4").get(0).getElementsByTag("a").get(0).attr("href");
 					title = e.getElementsByTag("h4").get(0).getElementsByTag("a").get(0).attr("title");
-					date = e.getElementsByClass("span_o").get(0).text();
-					if(date==null || !date.equals(currdate)){
-						if(CalendarUtil.addDay(currdate, -1).equals(date)){
-							return 0;
-						}
-						if(CalendarUtil.isAfter(currdate,date)){
-							return 0;
-						}
-					}
-					province = e.getElementsByClass("span_on").get(0).text();
-					messageType = e.getElementsByClass("span_on").get(3).text();
-					grhxMessageData.setBusType(busType);
-					if("01".equals(busType)){
-						if(messageType!=null && "招标/资审公告".equals(messageType)){
-							grhxMessageData.setMessagetype("1");//招标公告
-						}else if(messageType!=null && "交易结果公示".equals(messageType)){
-							grhxMessageData.setMessagetype("2");//中标公示
-						}else{
-							continue;
-						}
-					}else if("02".equals(busType)){
-						if(messageType!=null && "采购/资审公告".equals(messageType)){
-							grhxMessageData.setMessagetype("1");//招标公告
-						}else if(messageType!=null && "中标公告".equals(messageType)){
-							grhxMessageData.setMessagetype("2");//中标公示
-						}else if(messageType!=null && "更正事项".equals(messageType)){
-							grhxMessageData.setMessagetype("3");//变更公告
-						}else{
-							continue;
-						}
-					}else{
-						continue;
-					}
-					grhxMessageData.setTitle(title);
-					grhxMessageData.setDate(sim.parse(date));
-					pro = provinceMap.get(province);
-					if(pro==null || "".equals(pro)){
-						continue;
-					}
-					grhxMessageData.setProvince(pro);
-					//验证该数据是否存在
-					map = new HashMap<String, Object>();
-					map.put("title", grhxMessageData.getTitle());
-					map.put("province", grhxMessageData.getProvince());
-					map.put("messagetype", grhxMessageData.getMessagetype());
-					map.put("date", grhxMessageData.getDate());
-					list = grhxMessageDataService.getByMap(map);
-					if(list == null || list.size() == 0){
-						grhxMessageData.setWebtype("1");
-						grhxMessageData.setCreateTime(new Date());
-						docDetail = Jsoup.connect(url).get();
-						//第一种格式
-						if(docDetail.getElementById("mycontent")!=null){
-							grhxMessageData.setContent(docDetail.getElementById("mycontent").html());
-						}else{
-							Elements elesDetail = docDetail.getElementsByClass("fully_toggle_cont");
-							for(Element eDetail :elesDetail){
-								try {
-									if(eDetail.hasAttr("style")){
-										onclick = eDetail.getElementsByClass("li_hover").get(0).getElementsByTag("a").get(0).attr("onclick");
-										urlDetail = "http://www.ggzy.gov.cn/information"+onclick.split(",")[2].substring(1, onclick.split(",")[2].length()-2);
-										grhxMessageData.setContent(Jsoup.connect(urlDetail).get().getElementById("mycontent").html());
-										break;
-									}
-								} catch (Exception e3) {
-									e3.printStackTrace();
-								}
+					//物业 保洁 保安 安保 清洁 清洗
+					if(title.contains("物业") || title.contains("保洁") || title.contains("保安")
+							|| title.contains("安保") || title.contains("清洁") || title.contains("清洗")){
+						date = e.getElementsByClass("span_o").get(0).text();
+						if(date==null || !date.equals(currdate)){
+							if(CalendarUtil.addDay(currdate, -1).equals(date)){
+								return 0;
+							}
+							if(CalendarUtil.isAfter(currdate,date)){
+								return 0;
 							}
 						}
-						if(grhxMessageData.getContent()!=null && !"".equals(grhxMessageData.getContent())){
-							grhxMessageDataService.insert(grhxMessageData);
+						province = e.getElementsByClass("span_on").get(0).text();
+						messageType = e.getElementsByClass("span_on").get(3).text();
+						grhxMessageData.setBusType(busType);
+						if("01".equals(busType)){
+							if(messageType!=null && "招标/资审公告".equals(messageType)){
+								grhxMessageData.setMessagetype("1");//招标公告
+							}else if(messageType!=null && "交易结果公示".equals(messageType)){
+								grhxMessageData.setMessagetype("2");//中标公示
+							}else{
+								continue;
+							}
+						}else if("02".equals(busType)){
+							if(messageType!=null && "采购/资审公告".equals(messageType)){
+								grhxMessageData.setMessagetype("1");//招标公告
+							}else if(messageType!=null && "中标公告".equals(messageType)){
+								grhxMessageData.setMessagetype("2");//中标公示
+							}else if(messageType!=null && "更正事项".equals(messageType)){
+								grhxMessageData.setMessagetype("3");//变更公告
+							}else{
+								continue;
+							}
+						}else{
+							continue;
+						}
+						grhxMessageData.setTitle(title);
+						grhxMessageData.setDate(sim.parse(date));
+						pro = provinceMap.get(province);
+						if(pro==null || "".equals(pro)){
+							continue;
+						}
+						grhxMessageData.setProvince(pro);
+						//验证该数据是否存在
+						map = new HashMap<String, Object>();
+						map.put("title", grhxMessageData.getTitle());
+						map.put("province", grhxMessageData.getProvince());
+						map.put("messagetype", grhxMessageData.getMessagetype());
+						map.put("date", grhxMessageData.getDate());
+						list = grhxMessageDataService.getByMap(map);
+						if(list == null || list.size() == 0){
+							grhxMessageData.setWebtype("1");
+							grhxMessageData.setCreateTime(new Date());
+							docDetail = Jsoup.connect(url).get();
+							//第一种格式
+							if(docDetail.getElementById("mycontent")!=null){
+								grhxMessageData.setContent(docDetail.getElementById("mycontent").html());
+							}else{
+								Elements elesDetail = docDetail.getElementsByClass("fully_toggle_cont");
+								for(Element eDetail :elesDetail){
+									try {
+										if(eDetail.hasAttr("style")){
+											onclick = eDetail.getElementsByClass("li_hover").get(0).getElementsByTag("a").get(0).attr("onclick");
+											urlDetail = "http://www.ggzy.gov.cn/information"+onclick.split(",")[2].substring(1, onclick.split(",")[2].length()-2);
+											grhxMessageData.setContent(Jsoup.connect(urlDetail).get().getElementById("mycontent").html());
+											break;
+										}
+									} catch (Exception e3) {
+										e3.printStackTrace();
+									}
+								}
+							}
+							if(grhxMessageData.getContent()!=null && !"".equals(grhxMessageData.getContent())){
+								grhxMessageDataService.insert(grhxMessageData);
+							}
 						}
 					}
 				} catch (Exception e2) {

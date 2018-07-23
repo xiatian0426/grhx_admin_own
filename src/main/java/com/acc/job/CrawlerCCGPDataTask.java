@@ -34,9 +34,9 @@ public class CrawlerCCGPDataTask {
 	 * 爬取任务 0 0 1 * * ? 每天11,17点执行
 	 * @throws Exception 
 	 */
-	@Scheduled(cron = "0 0 11,17 * * ?")
+	@Scheduled(cron = "0 20 11,17 * * ?")
 	public void execute () throws Exception {
-		/*//一天7000+数据
+		//一天7000+数据
 		Map<String, String> provinceMap = null;
 		try {
 			System.out.println("爬取任务开始...");
@@ -68,7 +68,7 @@ public class CrawlerCCGPDataTask {
 		} catch (SelectException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}*/
+		}
 	}
 	/**
 	 * 爬取"中国政府采购网"的数据
@@ -101,50 +101,54 @@ public class CrawlerCCGPDataTask {
 				try {
 					url = eles.get(i).getElementsByTag("a").get(0).attr("href");
 					title = eles.get(i).getElementsByTag("a").get(0).text();
-					province = eles.get(i).getElementsByTag("span").get(0).getElementsByTag("a").get(0).text();
-					messageType = eles.get(i).getElementsByTag("span").get(0).getElementsByTag("strong").get(0).text();
-					date = eles.get(i).getElementsByTag("span").get(0).text().split("\\|")[0];
-					grhxMessageData.setTitle(title);
-					grhxMessageData.setDate(sim.parse(date));
-					if(messageType!=null && ("公开招标公告".equals(messageType) || "询价公告".equals(messageType)
-							|| "竞争性谈判公告".equals(messageType) || "单一来源公告".equals(messageType) || "资格预审公告".equals(messageType)
-							|| "邀请招标公告".equals(messageType) || "其他公告".equals(messageType) || "其它公告".equals(messageType) || "竞争性磋商公告".equals(messageType))){
-						grhxMessageData.setMessagetype("1");//招标公告
-						grhxMessageData.setBusType("03");
-					}else if(messageType!=null && ("中标公告".equals(messageType) || "成交公告".equals(messageType) || "终止公告".equals(messageType))){
-						grhxMessageData.setMessagetype("2");//中标公示
-						grhxMessageData.setBusType("04");
-					}else if(messageType!=null && "更正公告".equals(messageType)){
-						grhxMessageData.setMessagetype("3");//变更公告
-						grhxMessageData.setBusType("05");
-					}else{
-						continue;
-					}
-					pro = provinceMap.get(province);
-					if(pro==null || "".equals(pro)){
-						continue;
-					}
-					grhxMessageData.setProvince(pro);
-					//验证该数据是否存在
-					map = new HashMap<String, Object>();
-					map.put("title", grhxMessageData.getTitle());
-					map.put("province", grhxMessageData.getProvince());
-					map.put("messagetype", grhxMessageData.getMessagetype());
-					map.put("date", grhxMessageData.getDate());
-					list = grhxMessageDataService.getByMap(map);
-					if(list == null || list.size() == 0){
-						grhxMessageData.setWebtype("2");
-						grhxMessageData.setCreateTime(new Date());
-						docDetail = Jsoup.connect(url)
-								.header("Accept", "*/*")
-								.header("Accept-Encoding", "gzip, deflate")
-							.header("Accept-Language", "zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3")
-							.header("Referer", "https://www.baidu.com/")
-							.header("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:48.0) Gecko/20100101 Firefox/48.0")
-							.timeout(5000)
-							.get();
-						grhxMessageData.setContent(docDetail.getElementsByClass("vF_detail_content_container").get(0).html());
-						grhxMessageDataService.insert(grhxMessageData);
+					//物业 保洁 保安 安保 清洁 清洗
+					if(title.contains("物业") || title.contains("保洁") || title.contains("保安")
+							|| title.contains("安保") || title.contains("清洁") || title.contains("清洗")){
+						province = eles.get(i).getElementsByTag("span").get(0).getElementsByTag("a").get(0).text();
+						messageType = eles.get(i).getElementsByTag("span").get(0).getElementsByTag("strong").get(0).text();
+						date = eles.get(i).getElementsByTag("span").get(0).text().split("\\|")[0];
+						grhxMessageData.setTitle(title);
+						grhxMessageData.setDate(sim.parse(date));
+						if(messageType!=null && ("公开招标公告".equals(messageType) || "询价公告".equals(messageType)
+								|| "竞争性谈判公告".equals(messageType) || "单一来源公告".equals(messageType) || "资格预审公告".equals(messageType)
+								|| "邀请招标公告".equals(messageType) || "其他公告".equals(messageType) || "其它公告".equals(messageType) || "竞争性磋商公告".equals(messageType))){
+							grhxMessageData.setMessagetype("1");//招标公告
+							grhxMessageData.setBusType("03");
+						}else if(messageType!=null && ("中标公告".equals(messageType) || "成交公告".equals(messageType) || "终止公告".equals(messageType))){
+							grhxMessageData.setMessagetype("2");//中标公示
+							grhxMessageData.setBusType("04");
+						}else if(messageType!=null && "更正公告".equals(messageType)){
+							grhxMessageData.setMessagetype("3");//变更公告
+							grhxMessageData.setBusType("05");
+						}else{
+							continue;
+						}
+						pro = provinceMap.get(province);
+						if(pro==null || "".equals(pro)){
+							continue;
+						}
+						grhxMessageData.setProvince(pro);
+						//验证该数据是否存在
+						map = new HashMap<String, Object>();
+						map.put("title", grhxMessageData.getTitle());
+						map.put("province", grhxMessageData.getProvince());
+						map.put("messagetype", grhxMessageData.getMessagetype());
+						map.put("date", grhxMessageData.getDate());
+						list = grhxMessageDataService.getByMap(map);
+						if(list == null || list.size() == 0){
+							grhxMessageData.setWebtype("2");
+							grhxMessageData.setCreateTime(new Date());
+							docDetail = Jsoup.connect(url)
+									.header("Accept", "*/*")
+									.header("Accept-Encoding", "gzip, deflate")
+									.header("Accept-Language", "zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3")
+									.header("Referer", "https://www.baidu.com/")
+									.header("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:48.0) Gecko/20100101 Firefox/48.0")
+									.timeout(5000)
+									.get();
+							grhxMessageData.setContent(docDetail.getElementsByClass("vF_detail_content_container").get(0).html());
+							grhxMessageDataService.insert(grhxMessageData);
+						}
 					}
 				} catch (Exception e) {
 					System.out.println(url);

@@ -32,9 +32,9 @@ public class CrawlerBIBEDataTask {
 	/**
 	 * 爬取任务 0 0 1 * * ? 每天12,19点执行
 	 */
-	@Scheduled(cron = "0 30 11,18 * * ?")
+	@Scheduled(cron = "0 50 11,18 * * ?")
 	public void execute () {
-		/*Map<String, String> provinceMap = null;
+		Map<String, String> provinceMap = null;
 		try {
 			System.out.println("获取数据开始");
 			provinceMap = accProvinceService.getProvince();
@@ -53,7 +53,7 @@ public class CrawlerBIBEDataTask {
 		} catch (SelectException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}*/
+		}
 	}
 	
 	private int getCrawlerDataBIBE(int pageNum,Map<String, String> provinceMap,String busType,String currdate){
@@ -85,55 +85,59 @@ public class CrawlerBIBEDataTask {
 					grhxMessageData = new GrhxMessageData();
 					url = ele.getElementsByTag("a").get(0).attr("href");
 					title = ele.getElementsByTag("a").get(0).text();
-					date = ele.getElementsByClass("title-color").get(4).text();
-					if(date==null || !date.equals(currdate)){
-						if(CalendarUtil.addDay(currdate, -1).equals(date)){
-							return 0;
+					//物业 保洁 保安 安保 清洁 清洗
+					if(title.contains("物业") || title.contains("保洁") || title.contains("保安")
+							|| title.contains("安保") || title.contains("清洁") || title.contains("清洗")){
+						date = ele.getElementsByClass("title-color").get(4).text();
+						if(date==null || !date.equals(currdate)){
+							if(CalendarUtil.addDay(currdate, -1).equals(date)){
+								return 0;
+							}
+							if(CalendarUtil.isAfter(currdate,date)){
+								return 0;
+							}
 						}
-						if(CalendarUtil.isAfter(currdate,date)){
-							return 0;
+						province = ele.getElementsByClass("title-color").get(1).text();
+						if(title!=null && title.startsWith("重点项目")){
+							messageType = "5";
+						}else{
+							messageType = "4";
 						}
-					}
-					province = ele.getElementsByClass("title-color").get(1).text();
-					if(title!=null && title.startsWith("重点项目")){
-						messageType = "5";
-					}else{
-						messageType = "4";
-					}
-					grhxMessageData.setMessagetype(messageType);
-					grhxMessageData.setBusType(busType);
-					grhxMessageData.setTitle(title);
-					grhxMessageData.setDate(sim.parse(date));
-					pro = provinceMap.get(province);
-					if(pro==null || "".equals(pro)){
-						continue;
-					}
-					grhxMessageData.setProvince(pro);
-					//验证该数据是否存在
-					map = new HashMap<String, Object>();
-					map.put("title", grhxMessageData.getTitle());
-					map.put("province", grhxMessageData.getProvince());
-					map.put("messagetype", grhxMessageData.getMessagetype());
-					map.put("date", grhxMessageData.getDate());
-					list = grhxMessageDataService.getByMap(map);
-					if(list == null || list.size() == 0){
-						grhxMessageData.setWebtype("4");
-						grhxMessageData.setCreateTime(new Date());
-						
-						docDetail = Jsoup.connect("https://www.bibenet.com"+url)
-								.header("Accept", "*/*")
-								.header("Accept-Encoding", "gzip, deflate")
-							.header("Accept-Language", "zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3")
-							.header("Referer", "https://www.baidu.com/")
-							.header("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:48.0) Gecko/20100101 Firefox/48.0")
-							.timeout(5000)
-							.get();
-						//第一种格式
-						Element con_info = docDetail.getElementsByClass("table-bordered").get(0);
-						String detail = con_info.html();
-						grhxMessageData.setContent(detail);
-						if(grhxMessageData.getContent()!=null && !"".equals(grhxMessageData.getContent())){
-							grhxMessageDataService.insert(grhxMessageData);
+						grhxMessageData.setMessagetype(messageType);
+						grhxMessageData.setBusType(busType);
+						grhxMessageData.setTitle(title);
+						grhxMessageData.setDate(sim.parse(date));
+						pro = provinceMap.get(province);
+						if(pro==null || "".equals(pro)){
+							continue;
+						}
+						grhxMessageData.setProvince(pro);
+						//验证该数据是否存在
+						map = new HashMap<String, Object>();
+						map.put("title", grhxMessageData.getTitle());
+						map.put("province", grhxMessageData.getProvince());
+						map.put("messagetype", grhxMessageData.getMessagetype());
+						map.put("date", grhxMessageData.getDate());
+						list = grhxMessageDataService.getByMap(map);
+						if(list == null || list.size() == 0){
+							grhxMessageData.setWebtype("4");
+							grhxMessageData.setCreateTime(new Date());
+
+							docDetail = Jsoup.connect("https://www.bibenet.com"+url)
+									.header("Accept", "*/*")
+									.header("Accept-Encoding", "gzip, deflate")
+									.header("Accept-Language", "zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3")
+									.header("Referer", "https://www.baidu.com/")
+									.header("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:48.0) Gecko/20100101 Firefox/48.0")
+									.timeout(5000)
+									.get();
+							//第一种格式
+							Element con_info = docDetail.getElementsByClass("table-bordered").get(0);
+							String detail = con_info.html();
+							grhxMessageData.setContent(detail);
+							if(grhxMessageData.getContent()!=null && !"".equals(grhxMessageData.getContent())){
+								grhxMessageDataService.insert(grhxMessageData);
+							}
 						}
 					}
 				} catch (Exception e2) {
