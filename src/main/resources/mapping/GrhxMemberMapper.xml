@@ -129,6 +129,7 @@ PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
     	SELECT <include refid="columns" />
 	    FROM GRHX_MEMBER 
 		<include refid="findWhere"/>
+		order by CREATETIME desc
     </select>
 
 	<select id="getAll" resultMap="grhxMember">
