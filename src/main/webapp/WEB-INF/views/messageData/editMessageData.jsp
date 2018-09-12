@@ -38,6 +38,19 @@
 	<link href="${toolRoot}/select/select2.min.css" rel="stylesheet">
 	<script src="${toolRoot}/select/select2.full.min.js"></script>
 	<script src="${toolRoot}/select/select2-self.js"></script>
+
+	<!-- 文档编辑 -->
+	<link href="${toolRoot}/umeditor/themes/default/css/umeditor.css" type="text/css" rel="stylesheet">
+	<script type="text/javascript" src="${toolRoot}/umeditor/third-party/jquery.min.js"></script>
+	<script type="text/javascript" charset="utf-8" src="${toolRoot}/umeditor/umeditor.config.js"></script>
+	<script type="text/javascript" charset="utf-8" src="${toolRoot}/umeditor/umeditor.min.js"></script>
+	<script type="text/javascript" src="${toolRoot}/umeditor/lang/zh-cn/zh-cn.js"></script>
+	<script src="${toolRoot}/umeditor/dialogs/video/video.js" type="text/javascript" defer="defer"></script>
+	<script src="${toolRoot}/umeditor/dialogs/map/map.js" type="text/javascript" defer="defer"></script>
+	<script src="${toolRoot}/umeditor/dialogs/image/image.js" type="text/javascript" defer="defer"></script>
+	<script src="${toolRoot}/umeditor/dialogs/link/link.js" type="text/javascript" defer="defer"></script>
+	<script src="${toolRoot}/umeditor/dialogs/formula/formula.js" type="text/javascript" defer="defer"></script>
+	<script src="${toolRoot}/umeditor/dialogs/emotion/emotion.js" type="text/javascript" defer="defer"></script>
 	<script type="text/javascript">
 		//字符串去空格
 		String.prototype.trim=function(){
@@ -136,7 +149,10 @@
 				<tr>
 					<td style="background:#A0E0F7; padding: 10px 35px;"><font color="red">*</font>&nbsp;内容：</td>
 					<td colspan="3">
-						<textarea id="editor_id" name="content" style="height: 350px;">${messageData.content }</textarea>
+						<%--<textarea id="editor_id" name="content" style="height: 350px;">${messageData.content }</textarea>--%>
+						<div id="myEditor" name="content" style="height:350px;">
+							${messageData.content }
+						</div>
 					</td>
 				</tr>
 			</table>
@@ -146,5 +162,9 @@
 			</div>
 		</div>
 	</form>
+	<script type="text/javascript">
+        //实例化编辑器
+        var um = UM.getEditor('myEditor');
+	</script>
 </body>
 </html>
